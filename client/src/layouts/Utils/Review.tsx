@@ -11,6 +11,8 @@ export const Review: React.FC<{ review: ReviewModel, deleteReview: any }> = (pro
     const dateYear = date.getFullYear();
 
     const dateRender = longMonth + ' ' + dateDay + ', ' + dateYear;
+
+    console.log(props.review)
     
     return (
         <div>

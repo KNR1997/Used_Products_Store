@@ -38,7 +38,7 @@ export const BookCheckoutPage = () => {
 
     useEffect(() => {
         const fetchBook = async () => {
-            const baseUrl: string = `http://localhost:8080/api/books/${bookId}`;
+            const baseUrl: string = `http://localhost:8000/api/books/${bookId}/`;
 
             const response = await fetch(baseUrl);
 
@@ -70,7 +70,7 @@ export const BookCheckoutPage = () => {
 
     useEffect(() => {
         const fetchBookReviews = async () => {
-            const reviewUrl: string = `http://localhost:8080/api/reviews/search/findByBookId?bookId=${bookId}`;
+            const reviewUrl: string = `http://localhost:8000/api/reviews/search/findByBookId/${bookId}/`;
 
             const responseReviews = await fetch(reviewUrl);
 
@@ -80,7 +80,8 @@ export const BookCheckoutPage = () => {
 
             const responseJsonReviews = await responseReviews.json();
 
-            const responseData = responseJsonReviews._embedded.reviews;
+            const responseData = responseJsonReviews;
+            console.log('response',responseData)
 
             const loadedReviews: ReviewModel[] = [];
 
@@ -89,11 +90,11 @@ export const BookCheckoutPage = () => {
             for (const key in responseData) {
                 loadedReviews.push({
                     id: responseData[key].id,
-                    userEmail: responseData[key].userEmail,
+                    userEmail: responseData[key].user_email,
                     date: responseData[key].date,
                     rating: responseData[key].rating,
-                    book_id: responseData[key].bookId,
-                    reviewDescription: responseData[key].reviewDescription,
+                    book_id: responseData[key].book_id,
+                    reviewDescription: responseData[key].review_description,
                 });
                 weightedStarReviews = weightedStarReviews + responseData[key].rating;
             }
@@ -102,6 +103,8 @@ export const BookCheckoutPage = () => {
                 const round = (Math.round((weightedStarReviews / loadedReviews.length) * 2) / 2).toFixed(1);
                 setTotalStars(Number(round));
             }
+
+            console.log('loadedReviews', loadedReviews)
 
             setReviews(loadedReviews);
             setIsLoadingReview(false);
