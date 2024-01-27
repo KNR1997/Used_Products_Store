@@ -14,6 +14,9 @@ import { ReviewListPage } from './layouts/BookCheckoutPage/ReviewListPage/Review
 import { ShelfPage } from './layouts/ShelfPage/ShelfPage';
 import { MessagesPage } from './layouts/MessagesPage/MessagesPage';
 import { ManageLibraryPage } from './layouts/ManageLibraryPage/ManageLibraryPage';
+import LoginForm from './Authentication/Login';
+import { AuthProvider } from './Context/AuthContext';
+import RegisterForm from './Authentication/Register';
 
 const oktaAuth = new OktaAuth(oktaConfig);
 
@@ -32,6 +35,7 @@ export const App = () => {
 
   return (
     <div className='d-flex flex-column min-vh-100'>
+      <AuthProvider>
       <Security oktaAuth={oktaAuth} restoreOriginalUri={restoreOriginalUri} onAuthRequired={customAuthHandler}>
       <Navbar />
       <div className='flex-grow-1'>
@@ -51,6 +55,12 @@ export const App = () => {
           <Route path='/checkout/:bookId'>
             <BookCheckoutPage/>
           </Route>
+          <Route path='/login'>
+            <LoginForm/>
+          </Route>
+          <Route path='/register'>
+            <RegisterForm/>
+          </Route>
           <Route path='/login' render={
             () => <LoginWidget config={oktaConfig} /> 
             } 
@@ -63,6 +73,7 @@ export const App = () => {
       </div>
       <Footer />
       </Security>
+      </AuthProvider>
     </div>
   );
 }

@@ -24,8 +24,6 @@ export const Carousel = () => {
 
             const responseJson = await response.json();
 
-            console.log(responseJson)
-
             const responseData = responseJson;
 
             const loadedBooks: BookModel[] = [];
@@ -65,8 +63,6 @@ export const Carousel = () => {
             </div>
         )
     }
-
-    console.log('books:',books[0])
 
     return (
         <div className='container mt-5' style={{ height: 550 }}>
