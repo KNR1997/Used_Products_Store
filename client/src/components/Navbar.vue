@@ -1,4 +1,5 @@
 <script setup>
+import Home from '../views/Home.vue';
 
 let isAccountMenu = true
 let user = true
@@ -170,5 +171,6 @@ let isCartHover = false
                 </button>
             </div>
         </div>
+        <Home />
     </div>
 </template>
