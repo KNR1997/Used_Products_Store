@@ -1,18 +1,19 @@
 <script setup>
 import { computed } from 'vue';
 
-    const props = defineProps(['product'])
-    const product = props.product;
-    let url = 'https://picsum.photos/id/1/200/300';
+const props = defineProps(['product'])
+const product = props.product;
+let url = 'https://picsum.photos/id/1/200/300';
 
-    const priceComputed = computed(() => {
-        return product.price / 100
-    })
+const priceComputed = computed(() => {
+    return product.price / 100
+})
 
-    const oldPriceComputed = computed(() => {
-        let res =  (product.price + (product.price / 20))  / 100
-        return res.toFixed(2)
-    })
+const oldPriceComputed = computed(() => {
+    let res =  (product.price + (product.price / 20))  / 100
+    return res.toFixed(2)
+})
+
 
 </script>
 
@@ -43,6 +44,10 @@ import { computed } from 'vue';
                 <span class="px-1 relative -top-1.5 text-[#FF6674] text-xs font-semibold">
                     Extra 5% off
                 </span>
+
+                <div>
+                    {{  user }}
+                </div>
 
                 <div class="flex items-center gap-1 px-1 relative -top-1">
                     <span class="bg-[#FD374F] text-white text-[9px] font-semibold px-1.5 rounded-sm">Welcome Deal</span>

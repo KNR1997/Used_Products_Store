@@ -1,9 +1,28 @@
-<script setup>
-import Home from '../views/Home.vue';
+<script>
+import { onMounted, ref } from 'vue';
+import { authStore} from '../store/store'
 
-let isAccountMenu = true
-let user = true
-let isCartHover = false
+export default {
+    name: "Nav",
+    data() {
+        return{
+            isAccountMenu: ref(true),
+            // user: ref(true),
+            isCartHover: false,
+        }
+    },
+    setup() {
+        const store = authStore();
+        const user = ref(store.getUser());
+
+        // Use onMounted hook to update user value on component mount
+        onMounted(() => {
+            user.value = store.getUser();
+        });
+        
+        return { user };
+    }
+}
 
 </script>
 
@@ -34,6 +53,9 @@ let isCartHover = false
                     Cookie Preferences
                 </li>
                 <li class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer">
+                    <h2>{{ user }}</h2>
+                </li>
+                <li class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer">
                     Help
                 </li>
                 <li class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer">
@@ -54,7 +76,7 @@ let isCartHover = false
                         v-if="isAccountMenu"
                         class="absolute bg-white w-[220px] text-[#333333] z-40 top-[38px] -left-[100px] border-x border-b"
                     >
-                        <div v-if="!user">
+                        <div v-if="true">
                             <div class="text-semibold text-[15px] my-4 px-3">Welcome to AliExpress!</div>
                             <div class="flex items-center gap-1 px-3 mb-3">
                                 <router-link 

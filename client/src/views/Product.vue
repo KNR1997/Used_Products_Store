@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, onMounted, ref, onUpdated, computed } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 let product = ref({});
