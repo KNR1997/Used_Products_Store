@@ -14,4 +14,5 @@ urlpatterns = [
     path('register/', UserRegistrationView.as_view(), name='user-registration'),
 
     path('getAllProducts/', views.getAllProducts),
+    path('getProduct/<int:id>', views.getProduct),
 ]

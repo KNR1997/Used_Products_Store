@@ -11,6 +11,8 @@ from .serializers import UserRegistrationSerializer
 from ..models import Product
 from .serializers import ProductSerializer
 
+from django.shortcuts import get_object_or_404
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -45,4 +47,13 @@ def getAllProducts(request):
     serializer = ProductSerializer(products, many=True)
 
     # Return the serialized data in the response
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def getProduct(request, id):
+
+    product = get_object_or_404(Product, id=id)
+
+    serializer = ProductSerializer(product)
+
     return Response(serializer.data)

@@ -8,9 +8,8 @@ import Home from './views/Home.vue';
 <template>
   <div>
     <Navbar />
-    <!-- <router-view /> -->
-    <!-- <Home /> -->
-    <!-- <Footer /> -->
+    <router-view />
+    <Footer />
   </div>
 </template>
 

@@ -27,7 +27,7 @@ import { computed } from 'vue';
             cursor-pointer
         "
     >
-        <NuxtLink :to="`/item/${product.id}`">
+        <router-link :to="`/product/${product.id}`">
             <img 
                 class="rounded-t "
                 :src="url"
@@ -62,6 +62,6 @@ import { computed } from 'vue';
                 </p>
 
             </div>
-        </NuxtLink>
+        </router-link>
     </div>
 </template>
