@@ -1,6 +1,7 @@
 <script>
 import axios from 'axios';
 import { authStore } from '../store/store';
+import eventBus from '../EventBus';
 
 export default {
   name: 'Signin',
@@ -22,6 +23,9 @@ export default {
       if(response.status === 200){
         authStore().setUser(response.data);
         this.$router.push('/');
+
+        // Emit the custom event to trigger Navbar refresh
+        eventBus.emit('refreshNavbar');
       }else{
         alert('Something went wrong!')
       }

@@ -1,6 +1,7 @@
 <script setup>
 import ProductComponent from '../components/ProductComponent.vue';
-import { onMounted, reactive } from 'vue'
+import { onBeforeMount, onMounted, reactive } from 'vue'
+import { authStore} from '../store/store'
 
 const state = reactive({
   products: null,
