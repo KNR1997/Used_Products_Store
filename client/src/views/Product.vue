@@ -1,8 +1,10 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { cartStore } from "../store/store";
 
 let product = ref({});
+let items = ref([]);
 let url = 'https://picsum.photos/id/1/200/300';
 
 onMounted(async () => {
@@ -12,10 +14,33 @@ onMounted(async () => {
   try {
     const response = await fetch(`http://127.0.0.1:8000/api/getProduct/${productId}`);
     product.value = await response.json();
+    console.log(product.value)
   } catch (error) {
     console.error(error);
   }
 });
+
+const addToCart =() => {
+    console.log('add to cart function')
+    cartStore().addItem(product.value)
+}
+
+const watchedItems = computed(() => cartStore().getItems());
+items.value = watchedItems;
+// watch(watchedItems, (cartItems) => {
+//   console.log('cartItems: ', cartItems);
+//   items.value = cartItems;
+// });
+
+const isInCart = computed(() => {
+    let res = false
+    cartStore().getItems().forEach(prod => {
+        if (product.value.id == prod.id) {
+            res = true
+        }
+    })
+    return res
+})
 
 </script>
 
@@ -48,6 +73,7 @@ onMounted(async () => {
                 <div class="md:w-[60%] bg-white p-3 rounded-lg">
                     <div v-if="product">
                         <p class="mb-2">{{ product.title }}</p>
+                        <p class="mb-2">{{ items }}</p>
                         <p class="font-light text-[12px] mb-2">{{ product.description }}</p>
                     </div>
 
@@ -70,7 +96,7 @@ onMounted(async () => {
                     <div class="border-b" />
 
                     <div class="flex items-center justify-start gap-2 my-2">
-                        <div class="text-xl font-bold">$ {{ priceComputed }}</div>
+                        <div class="text-xl font-bold">$ {{ product.price }}</div>
                         <span class="bg-[#F5F5F5] border text-[#C08562] text-[9px] font-semibold px-1.5 rounded-sm">70% off</span>
                     </div>
 
