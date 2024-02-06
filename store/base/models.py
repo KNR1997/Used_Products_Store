@@ -27,3 +27,14 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Address(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    contact_name = models.CharField(max_length=255)
+    address = models.TextField()
+    zip_code = models.CharField(max_length=10)
+    city = models.CharField(max_length=255)
+    country = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.contact_name}'s Address"
