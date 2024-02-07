@@ -39,8 +39,11 @@ watch(() => {
     }
 })
 
-const addToCart =() => {
-    cartStore().addItem(product.value)
+const addToCart = () => {
+    cartStore().addItem({
+        product: product.value,
+        quantity: 1
+    })
 }
 
 const watchedItems = computed(() => cartStore().getItems());

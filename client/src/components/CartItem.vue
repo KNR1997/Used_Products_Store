@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue';
-import { TrashIcon } from "@heroicons/vue/24/solid";
+import { computed, ref } from 'vue';
+import { TrashIcon, PlusIcon, MinusIcon } from "@heroicons/vue/24/solid";
 import { cartStore } from "../store/store";
 
 const props = defineProps(['product', 'selectedArray'])
@@ -9,6 +9,7 @@ const emit = defineEmits(['selectedRadio'])
 
 let isHover = ref(false)
 let isSelected = ref(false)
+let quantity = ref(1)
 
 let url = 'https://picsum.photos/id/1/200/200';
 
@@ -19,6 +20,32 @@ const removeFromCart = () => {
         }
     })
 }
+
+const increment = () => {
+    quantity.value++;
+
+    // Find the item in cartStore and increment its quantity
+    const cartItems = cartStore().getItems();
+    const cartItemIndex = cartItems.findIndex(item => item.product.id === props.product.id);
+
+    if (cartItemIndex !== -1) {
+        // If the item is found in cartStore, increment its quantity
+        cartItems[cartItemIndex].quantity++;
+    }
+
+    console.log(cartStore().getItems())
+}
+
+const decrement = () => {
+    if(quantity.value != 0) {
+        quantity.value--
+    }
+}
+
+const quantityValue = computed(() => {
+    return quantity;
+});
+
 </script>
 
 <template>
@@ -72,11 +99,28 @@ const removeFromCart = () => {
             <p class="text-[#009A66] text-xs font-semibold pt-1">
                 Free Shipping
             </p>
+        </div>
 
+        <div>
             <div class="flex items-center justify-end">
                 <button @click="removeFromCart()" class="hover:text-red-500">
-                    <span class="h-9 min-w-9 rounded-full p-0.5 bg-[#FFFF] mr-2">
+                    <span class="h-9 min-w-9 rounded-full p-1 bg-[#FFFF] mr-2">
                         <TrashIcon class="icon" />
+                    </span>
+                </button>
+            </div>
+            <div class="flex justify-start items-center">
+                <button>
+                    <span class="h-9 min-w-9 p-1 bg-[#FFFF] mr-2">
+                        <MinusIcon @click="decrement" class="icon" style="background-color: rgb(219, 219, 219)"/>
+                    </span>
+                </button>
+                <div class="p-2">
+                    <h2>{{ quantityValue.value }}</h2>
+                </div>
+                <button>
+                    <span class="h-9 min-w-9 rounded-full p-1 bg-[#FFFF] mr-2">
+                        <PlusIcon @click="increment" class="icon" style="background-color: rgb(219, 219, 219)"/>
                     </span>
                 </button>
             </div>

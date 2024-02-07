@@ -18,7 +18,7 @@ let url = 'https://picsum.photos/id/1/200/200';
             </div>
 
             <div class="text-lg font-semibold mt-2">
-                $ <span class="font-bold">{{ product.price }}</span>
+                $ <span class="font-bold">{{ product.price }} * {{  }}</span>
             </div>
         </div>
     </div>
