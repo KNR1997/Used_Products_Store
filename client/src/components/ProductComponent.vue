@@ -6,14 +6,8 @@ const product = props.product;
 let url = 'https://picsum.photos/id/1/200/300';
 
 const priceComputed = computed(() => {
-    return product.price / 100
+    return (product.price - product.price*0.05).toFixed(2)
 })
-
-const oldPriceComputed = computed(() => {
-    let res =  (product.price + (product.price / 20))  / 100
-    return res.toFixed(2)
-})
-
 
 </script>
 

@@ -10,6 +10,7 @@ const cards = [
     'paypal.png',
     'applepay.png',
 ]
+
 </script>
 
 <template>
@@ -80,7 +81,8 @@ const cards = [
                                 $ <span class="font-extrabold">{{ totalPriceComputed }}</span>
                             </div>
                         </div>
-                        <button 
+                        <router-link to="/checkout">
+                            <button 
                             class="
                                 flex
                                 items-center
@@ -94,9 +96,10 @@ const cards = [
                                 rounded-full
                                 mt-4
                             "
-                        >
-                            Checkout
-                        </button>
+                            >
+                                Checkout
+                            </button>
+                        </router-link>
                     </div>
 
                     <div id="PaymentProtection" class="bg-white rounded-lg p-4 mt-4">

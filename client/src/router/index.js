@@ -4,6 +4,7 @@ import Product from '../views/Product.vue'
 import Auth from '../views/Auth.vue'
 import Shoppingcart from '../views/Shoppingcart.vue'
 import Address from '../views/Address.vue'
+import Checkout from '../views/Checkout.vue'
 
 const routes = [
     {
@@ -30,6 +31,11 @@ const routes = [
         path: '/address',
         name: 'address',
         component: Address
+    },
+    {
+        path: '/checkout',
+        name: 'checkout',
+        component: Checkout
     }
 ];
 

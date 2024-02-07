@@ -1,5 +1,7 @@
 <script setup>
-import { ref, toRefs } from 'vue';
+import { ref } from 'vue';
+import { TrashIcon } from "@heroicons/vue/24/solid";
+import { cartStore } from "../store/store";
 
 const props = defineProps(['product', 'selectedArray'])
 
@@ -8,19 +10,15 @@ const emit = defineEmits(['selectedRadio'])
 let isHover = ref(false)
 let isSelected = ref(false)
 
-let url = 'https://picsum.photos/id/1/200/300';
+let url = 'https://picsum.photos/id/1/200/200';
 
 const removeFromCart = () => {
-    userStore.cart.forEach((prod, index) => {
-        if (prod.id === product.value.id) {
-            userStore.cart.splice(index, 1);
+    cartStore().getItems().forEach((prod, index) => {
+        if (prod.id === props.product.id) {
+            cartStore().getItems().splice(index, 1);
         }
     })
 }
-
-// watch(() => isSelected.value, (val) => {
-//     emit('selectedRadio', { id: product.value.id, val: val })
-// })
 </script>
 
 <template>
@@ -64,7 +62,7 @@ const removeFromCart = () => {
             </div>
 
             <div class="text-xl font-semibold">
-                $ <span class="font-bold">{{ product.price / 100 }}</span>
+                $ <span class="font-bold">{{ product.price }}</span>
             </div>
 
             <p class="text-[#009A66] text-xs font-semibold pt-1">
@@ -76,11 +74,10 @@ const removeFromCart = () => {
             </p>
 
             <div class="flex items-center justify-end">
-                <button 
-                    @click="removeFromCart()"
-                    class="sm:hidden block -mt-0.5 hover:text-red-500"
-                >
-                    <Icon name="material-symbols:delete-outline" size="20" />
+                <button @click="removeFromCart()" class="hover:text-red-500">
+                    <span class="h-9 min-w-9 rounded-full p-0.5 bg-[#FFFF] mr-2">
+                        <TrashIcon class="icon" />
+                    </span>
                 </button>
             </div>
         </div>
