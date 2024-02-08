@@ -52,7 +52,7 @@ items.value = watchedItems;
 const isInCart = computed(() => {
     let res = false
     cartStore().getItems().forEach(prod => {
-        if (product.value.id == prod.id) {
+        if (product.value.id == prod.product.id) {
             res = true
         }
     })

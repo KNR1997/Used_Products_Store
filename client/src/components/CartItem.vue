@@ -26,19 +26,26 @@ const increment = () => {
 
     // Find the item in cartStore and increment its quantity
     const cartItems = cartStore().getItems();
-    const cartItemIndex = cartItems.findIndex(item => item.product.id === props.product.id);
+    const cartItemIndex = cartItems.findIndex(item => item.product.id === props.product.product.id);
 
     if (cartItemIndex !== -1) {
         // If the item is found in cartStore, increment its quantity
         cartItems[cartItemIndex].quantity++;
     }
-
-    console.log(cartStore().getItems())
 }
 
 const decrement = () => {
-    if(quantity.value != 0) {
-        quantity.value--
+    if(quantity.value != 1) {
+        quantity.value--;
+
+        // Find the item in cartStore and increment its quantity
+        const cartItems = cartStore().getItems();
+        const cartItemIndex = cartItems.findIndex(item => item.product.id === props.product.product.id);
+
+        if (cartItemIndex !== -1) {
+            // If the item is found in cartStore, increment its quantity
+            cartItems[cartItemIndex].quantity--;
+        }
     }
 }
 
@@ -78,7 +85,7 @@ const quantityValue = computed(() => {
             <div class="flex items-center justify-between w-full">
                 <div class="flex items-center justify-between truncate">
                     <span class="sm:block hidden bg-[#FD374F] text-white text-[9px] font-semibold px-1.5 rounded-sm min-w-[80px]">Welcome Deal</span>
-                    <div class="truncate sm:pl-2">{{ product.title }}</div>
+                    <div class="truncate sm:pl-2">{{ product.product.title }}</div>
                 </div>
                 <button 
                     @click="removeFromCart()"
@@ -89,7 +96,7 @@ const quantityValue = computed(() => {
             </div>
 
             <div class="text-xl font-semibold">
-                $ <span class="font-bold">{{ product.price }}</span>
+                $ <span class="font-bold">{{ product.product.price }}</span>
             </div>
 
             <p class="text-[#009A66] text-xs font-semibold pt-1">
@@ -116,7 +123,7 @@ const quantityValue = computed(() => {
                     </span>
                 </button>
                 <div class="p-2">
-                    <h2>{{ quantityValue.value }}</h2>
+                    <h2>{{ product.quantity }}</h2>
                 </div>
                 <button>
                     <span class="h-9 min-w-9 rounded-full p-1 bg-[#FFFF] mr-2">

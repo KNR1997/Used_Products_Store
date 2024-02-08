@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia'
 import { jwtDecode } from "jwt-decode";
+import { toRefs } from 'vue';
 
 export const authStore = defineStore('authStore', {
     state: () => ({
@@ -29,12 +30,11 @@ export const cartStore = defineStore('cartStore', {
     }),
     actions: {
         getItems() {
-            return this.items;
+            const { items } = toRefs(this);
+            return items.value;
         },
         addItem(item) {
-            console.log('in cartStore, going to push: ', item)
-            this.items = [...this.items, item];
-            console.log(this.items)
+            this.items.push(item);
         }
     }
 })

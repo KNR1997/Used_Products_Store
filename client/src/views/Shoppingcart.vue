@@ -1,9 +1,16 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted, ref, toRefs } from 'vue';
 import { cartStore } from '../store/store';
 import CartItem from '../components/CartItem.vue'
 
-const cartItems = computed(() => cartStore().getItems());
+const cartItems = ref([]);
+
+onMounted(() => {
+    const { items } = toRefs(cartStore());
+    cartItems.value = items.value;
+    console.log('onMounted: ', items.value);
+})
+
 const cards = [
     'visa.png',
     'mastercard.png',
