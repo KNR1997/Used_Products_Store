@@ -9,7 +9,7 @@ const emit = defineEmits(['selectedRadio'])
 
 let isHover = ref(false)
 let isSelected = ref(false)
-let quantity = ref(1)
+let quantity = ref(props.product.quantity)
 
 let url = 'https://picsum.photos/id/1/200/200';
 
@@ -23,6 +23,7 @@ const removeFromCart = () => {
 
 const increment = () => {
     quantity.value++;
+    console.log('increment')
 
     // Find the item in cartStore and increment its quantity
     const cartItems = cartStore().getItems();
@@ -37,6 +38,7 @@ const increment = () => {
 const decrement = () => {
     if(quantity.value != 1) {
         quantity.value--;
+        console.log('decrease')
 
         // Find the item in cartStore and increment its quantity
         const cartItems = cartStore().getItems();

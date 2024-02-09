@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import CustomUser, Product, Address
+from ..models import CustomUser, Product, Address, Order
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
@@ -25,3 +25,9 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ['id', 'contact_name', 'address', 'zip_code', 'city', 'country']
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['user', 'product', 'product_quantity', 'status']

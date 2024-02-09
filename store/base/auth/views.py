@@ -9,7 +9,7 @@ from rest_framework import generics, status
 from .serializers import UserRegistrationSerializer
 
 from ..models import Product, Address
-from .serializers import ProductSerializer, AddressSerializer
+from .serializers import ProductSerializer, AddressSerializer, OrderSerializer
 
 from django.shortcuts import get_object_or_404
 
@@ -84,6 +84,20 @@ def saveUserAddress(request, user_id):
 
         if serializer.is_valid():
             serializer.save(user_id=user_id)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+
+@api_view(['POST'])
+def saveOrder(request):
+    try:
+        serializer = OrderSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

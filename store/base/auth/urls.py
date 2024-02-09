@@ -19,4 +19,6 @@ urlpatterns = [
 
     path('save-user-address/<int:user_id>', views.saveUserAddress, name='save_user_address'),
     path('get-address/<int:user_id>', views.getAddressByUserId, name='get_address_by_user_id'),
+
+    path('save-order', views.saveOrder, name='save_order'),
 ]

@@ -15,7 +15,7 @@ onMounted(async () => {
     }
 
     cartStore().getItems().forEach(item => {
-        total.value += parseInt(item.price)
+        total.value += parseInt(item.product.price * item.quantity)
     })
 })
 

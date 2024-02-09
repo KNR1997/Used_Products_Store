@@ -8,7 +8,6 @@ const cartItems = ref([]);
 onMounted(() => {
     const { items } = toRefs(cartStore());
     cartItems.value = items.value;
-    console.log('onMounted: ', items.value);
 })
 
 const cards = [
@@ -17,6 +16,16 @@ const cards = [
     'paypal.png',
     'applepay.png',
 ]
+
+const totalPriceComputed = computed(() => {
+    let total = 0;
+    cartStore().getItems().forEach(item => {
+        console.log(item.product.price)
+        total += parseInt(item.product.price * item.quantity)
+    })
+
+    return total;
+})
 
 </script>
 
