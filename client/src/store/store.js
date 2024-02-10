@@ -35,6 +35,9 @@ export const cartStore = defineStore('cartStore', {
         },
         addItem(item) {
             this.items.push(item);
+        },
+        clearCart() {
+            this.items = []
         }
     }
 })

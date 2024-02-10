@@ -21,4 +21,5 @@ urlpatterns = [
     path('get-address/<int:user_id>', views.getAddressByUserId, name='get_address_by_user_id'),
 
     path('save-order', views.saveOrder, name='save_order'),
+    path('getUserOrders/<int:user_id>', views.getUserOrders, name='get_User_Orders'),
 ]

@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import generics, status
 from .serializers import UserRegistrationSerializer
 
-from ..models import Product, Address
+from ..models import Product, Address, Order
 from .serializers import ProductSerializer, AddressSerializer, OrderSerializer
 
 from django.shortcuts import get_object_or_404
@@ -95,12 +95,63 @@ def saveUserAddress(request, user_id):
 @api_view(['POST'])
 def saveOrder(request):
     try:
-        serializer = OrderSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user_id = request.data.get('user')
+        products_data = request.data.get('products', [])
 
+        # Validate user and products_data
+        if not user_id or not products_data:
+            return Response({'error': 'Invalid request data'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Iterate over products and create Order records
+        order_records = []
+        for product_data in products_data:
+            product_id = product_data.get('product')
+            product_quantity = product_data.get('product_quantity')
+
+            # Validate product data
+            if not product_id or not product_quantity:
+                return Response({'error': 'Invalid product data'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Create Order record
+            order_data = {
+                'user': user_id,
+                'product': product_id,
+                'product_quantity': product_quantity,
+                'status': 'pending'
+            }
+            order_serializer = OrderSerializer(data=order_data)
+            if order_serializer.is_valid():
+                order_serializer.save()
+                order_records.append(order_serializer.data)
+            else:
+                return Response(order_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+        return Response(order_records, status=status.HTTP_201_CREATED)
+    
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['GET'])
+def getUserOrders(request, user_id):
+    try:
+        # Get the user's address details
+        user_address = get_object_or_404(Address, user_id=user_id)
+        address_serializer = AddressSerializer(user_address)
+        
+        # Get all orders for the specified user ID
+        orders = Order.objects.filter(user_id=user_id)
+
+        # Serialize the orders data
+        order_serializer  = OrderSerializer(orders, many=True)
+
+        # Include both orders and user address details in the response
+        response_data = {
+            'user_address': address_serializer.data,
+            'user_orders': order_serializer.data
+        }
+
+        # Return the serialized data in the response
+        return Response(response_data)
+    
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
