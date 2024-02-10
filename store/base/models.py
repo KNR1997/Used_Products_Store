@@ -24,6 +24,11 @@ class Product(models.Model):
     title = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
+    quantity = models.IntegerField(default=1)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=1)
+    rating = models.DecimalField(max_digits=3, decimal_places=1, default=0)
+    reviews = models.IntegerField(default=0)
+    sold = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name

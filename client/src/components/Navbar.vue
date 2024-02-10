@@ -137,24 +137,7 @@ const signOut = () => {
                 type="text"
                 v-model="searchItem"
               />
-              <button
-                class="flex items-center h-[100%] p-1.5 px-2 bg-[#FF4646]"
-              ></button>
-            </div>
-
-            <div class="absolute bg-white max-w-[700px] h-auto w-full">
-              <div class="p-1">
-                <router-link
-                  :to="`/item`"
-                  class="flex items-center justify-between w-full cursor-pointer hover:bg-gray-100"
-                >
-                  <div class="flex items-center">
-                    <img class="rounded-md" width="40" />
-                    <div class="truncate ml-2">title</div>
-                  </div>
-                  <div class="truncate">price</div>
-                </router-link>
-              </div>
+              <MagnifyingGlassIcon class="icon" style="height: 30px; width: 40px; color: white; background-color: red;"/>
             </div>
           </div>
         </div>

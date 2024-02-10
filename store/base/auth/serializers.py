@@ -19,7 +19,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'name', 'title', 'price', 'description']
+        fields = ['id', 'name', 'title', 'price', 'description', 'quantity', 'rating', 'reviews', 'sold']
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
