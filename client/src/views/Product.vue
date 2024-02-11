@@ -2,11 +2,15 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { cartStore } from "../store/store";
-import { StarIcon, HeartIcon } from "@heroicons/vue/24/solid";
+import { StarIcon, HeartIcon, HandThumbUpIcon } from "@heroicons/vue/24/solid";
+import ProductCommentBox from "../components/ProductCommentBox.vue";
+import ProductCommentInput from "../components/ProductCommentInput.vue"
 
 let product = ref({});
 let items = ref([]);
 let currentImage = ref(null);
+let addNewReview = ref(false);
+let newComment = ref('');
 
 let url = "https://picsum.photos/id/1/800/800";
 
@@ -47,6 +51,14 @@ const addToCart = () => {
     quantity: 1,
   });
 };
+
+const addReview = () => {
+  addNewReview.value = true;
+}
+
+const postComment = (data) => {
+  console.log('emit: ', data)
+}
 
 const watchedItems = computed(() => cartStore().getItems());
 items.value = watchedItems;
@@ -166,6 +178,37 @@ const priceComputed = computed(() => {
           />
         </div>
       </div>
+    </div>
+
+    <div class="border-b" />
+
+    <div id="comment">
+      <div id="top" class="md:flex gap-4 justify-between mx-auto w-full pb-8">
+        <div id="left">
+          <p class="text-2xl font-bold py-10">Customer Reviews (3298)</p>
+          <p class="text-6xl font-bold pb-4">4.7</p>
+          <div id="stars" class="flex">
+            <StarIcon class="icon" style="height: 30px;" />
+            <StarIcon class="icon" style="height: 30px;" />
+            <StarIcon class="icon" style="height: 30px;" />
+          </div>
+          <p>All reviews come from verified purchasers</p>
+        </div>
+        <div id="right">
+          <div class="py-10">
+            <button
+              @click="addReview()"
+              class="px-6 py-2 rounded-lg text-white text-lg font-semibold bg-gradient-to-r from-[#e6a67c] to-[#cea05c]"
+            >
+              Add Review
+            </button>
+          </div>
+        </div>
+      </div>
+      <ProductCommentBox />
+      <section v-if="addNewReview">
+        <ProductCommentInput @post-comment="postComment"/>
+      </section>
     </div>
   </div>
 </template>

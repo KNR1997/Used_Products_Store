@@ -8,8 +8,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import generics, status
 from .serializers import UserRegistrationSerializer
 
-from ..models import Product, Address, Order
-from .serializers import ProductSerializer, AddressSerializer, OrderSerializer
+from ..models import Product, Address, Order, Review, CustomUser
+from .serializers import ProductSerializer, AddressSerializer, OrderSerializer, ReviewSerializer
 
 from django.shortcuts import get_object_or_404
 
@@ -153,5 +153,44 @@ def getUserOrders(request, user_id):
         # Return the serialized data in the response
         return Response(response_data)
     
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['POST'])
+def saveReview(request):
+    try:
+        user_id = request.data.get('user_id')
+        product_id = request.data.get('product_id')
+        review_text = request.data.get('review')
+
+        # Validate user, product, and review_text
+        if not user_id or not product_id or not review_text:
+            return Response({'error': 'Invalid request data'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the user and product exist
+        user = get_object_or_404(CustomUser, id=user_id)
+        product = get_object_or_404(Product, id=product_id)
+
+        # Get or create the user and product instances
+        user = CustomUser.objects.get(pk=user_id)
+        product = Product.objects.get(pk=product_id)
+
+        # Create Review record
+        review_data = {
+            'user': user_id,
+            'product': product_id,
+            'review': review_text,
+        }
+        review_serializer = ReviewSerializer(data=review_data)
+
+        # Check if the user already put a comment
+        review = Review.objects.filter(user=user, product=product).first()
+
+        if review_serializer.is_valid():
+            review_serializer.save()
+            return Response(review_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(review_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

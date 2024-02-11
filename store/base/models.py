@@ -59,3 +59,11 @@ class Order(models.Model):
     
     def __str__(self):
         return f"Order for {self.user.username} - {self.product.name}"
+    
+class Review(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    review = models.CharField(max_length=500)
+
+    def __str__(self):
+        return f"Review for product {self.product}"

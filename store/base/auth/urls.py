@@ -22,4 +22,6 @@ urlpatterns = [
 
     path('save-order', views.saveOrder, name='save_order'),
     path('getUserOrders/<int:user_id>', views.getUserOrders, name='get_User_Orders'),
+
+    path('save-review', views.saveReview, name='save_review'),
 ]
