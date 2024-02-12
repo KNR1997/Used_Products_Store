@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import { cartStore } from "../store/store";
+import { cartStore, authStore } from "../store/store";
 import { StarIcon, HeartIcon, HandThumbUpIcon } from "@heroicons/vue/24/solid";
 import ProductCommentBox from "../components/ProductCommentBox.vue";
 import ProductCommentInput from "../components/ProductCommentInput.vue"
@@ -56,8 +56,38 @@ const addReview = () => {
   addNewReview.value = true;
 }
 
-const postComment = (data) => {
-  console.log('emit: ', data)
+const postComment = async (data) => {
+  try {
+    const user = authStore().getUser();
+
+    console.log('data: ', data)
+
+    const payload = {
+      user_id: user.user_id,
+      product_id: product.value.id,
+      review: data
+    }
+
+    const endpoint = `http://127.0.0.1:8000/api/save-review`;
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    // Check if the request was successful
+    if (response.ok) {
+      console.log('Address submitted successfully');
+      // Optionally, update the state or perform other actions upon successful submission
+    } else {
+      console.error('Failed to submit address');
+    }
+  } catch(error) {
+    console.log('Error during address submission', error);
+  }
 }
 
 const watchedItems = computed(() => cartStore().getItems());
@@ -206,7 +236,7 @@ const priceComputed = computed(() => {
         </div>
       </div>
       <ProductCommentBox />
-      <section v-if="addNewReview">
+      <section v-if="addNewReview" class="py-5">
         <ProductCommentInput @post-comment="postComment"/>
       </section>
     </div>
