@@ -16,6 +16,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         )
         return user
 
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'email']
+
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
@@ -33,6 +38,7 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ['user', 'product', 'product_quantity', 'status']
 
 class ReviewSerializer(serializers.ModelSerializer):
+    user_details = CustomUserSerializer(source='user', read_only=True)
     class Meta:
         model = Review
-        fields = ['user', 'product', 'review']
+        fields = ['user', 'user_details', 'product', 'review', 'date']

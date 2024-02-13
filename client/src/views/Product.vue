@@ -4,13 +4,14 @@ import { useRoute } from "vue-router";
 import { cartStore, authStore } from "../store/store";
 import { StarIcon, HeartIcon, HandThumbUpIcon } from "@heroicons/vue/24/solid";
 import ProductCommentBox from "../components/ProductCommentBox.vue";
-import ProductCommentInput from "../components/ProductCommentInput.vue"
+import ProductCommentInput from "../components/ProductCommentInput.vue";
 
 let product = ref({});
+let reviews = ref([]);
 let items = ref([]);
 let currentImage = ref(null);
 let addNewReview = ref(false);
-let newComment = ref('');
+let userReview = ref("");
 
 let url = "https://picsum.photos/id/1/800/800";
 
@@ -31,8 +32,9 @@ onMounted(async () => {
     const response = await fetch(
       `http://127.0.0.1:8000/api/getProduct/${productId}`
     );
-    product.value = await response.json();
-    console.log(product.value);
+    let data = await response.json();
+    product.value = data.product;
+    reviews.value = data.reviews;
   } catch (error) {
     console.error(error);
   }
@@ -54,41 +56,45 @@ const addToCart = () => {
 
 const addReview = () => {
   addNewReview.value = true;
-}
+};
 
 const postComment = async (data) => {
   try {
     const user = authStore().getUser();
 
-    console.log('data: ', data)
+    console.log("data: ", data);
 
     const payload = {
       user_id: user.user_id,
       product_id: product.value.id,
-      review: data
-    }
+      review: data,
+    };
 
     const endpoint = `http://127.0.0.1:8000/api/save-review`;
 
     const response = await fetch(endpoint, {
-      method: 'POST',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
     });
 
     // Check if the request was successful
     if (response.ok) {
-      console.log('Address submitted successfully');
+      addNewReview.value = false;
       // Optionally, update the state or perform other actions upon successful submission
     } else {
-      console.error('Failed to submit address');
+      console.error("Failed to submit review");
     }
-  } catch(error) {
-    console.log('Error during address submission', error);
+  } catch (error) {
+    console.log("Error during review submission", error);
   }
-}
+};
+
+const closeCommentBox = () => {
+  addNewReview.value = false;
+};
 
 const watchedItems = computed(() => cartStore().getItems());
 items.value = watchedItems;
@@ -107,6 +113,21 @@ const isInCart = computed(() => {
 
 const priceComputed = computed(() => {
   return (product.value.price - product.value.price * 0.05).toFixed(2);
+});
+
+const reviewdByUser = computed(() => {
+  const user = authStore().getUser();
+
+  if (Array.isArray(reviews.value) && reviews.value.length > 0) {
+    return reviews.value.some((review) => {
+      if (review.user === user.user_id) {
+        userReview.value = review.review; // update userReview
+        return true;
+      }
+      return false;
+    });
+  }
+  return false;
 });
 </script>
 
@@ -230,14 +251,21 @@ const priceComputed = computed(() => {
               @click="addReview()"
               class="px-6 py-2 rounded-lg text-white text-lg font-semibold bg-gradient-to-r from-[#e6a67c] to-[#cea05c]"
             >
-              Add Review
+              <div v-if="reviewdByUser">Edit</div>
+              <div v-else>Add Comment</div>
             </button>
           </div>
         </div>
       </div>
-      <ProductCommentBox />
+      <div v-for="review in reviews" :key="review.id">
+        <ProductCommentBox :review="review" />
+      </div>
       <section v-if="addNewReview" class="py-5">
-        <ProductCommentInput @post-comment="postComment"/>
+        <ProductCommentInput
+          @post-comment="postComment"
+          @close="closeCommentBox"
+          :userReview="userReview"
+        />
       </section>
     </div>
   </div>

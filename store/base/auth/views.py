@@ -12,6 +12,7 @@ from ..models import Product, Address, Order, Review, CustomUser
 from .serializers import ProductSerializer, AddressSerializer, OrderSerializer, ReviewSerializer
 
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -51,12 +52,25 @@ def getAllProducts(request):
 
 @api_view(['GET'])
 def getProduct(request, id):
+    try:
+        # Get the product details
+        product = get_object_or_404(Product, id=id)
+        product_serializer  = ProductSerializer(product)
 
-    product = get_object_or_404(Product, id=id)
+        # Get the reviews for the product
+        reviews = Review.objects.filter(product=id)
+        review_serializer = ReviewSerializer(reviews, many=True)
 
-    serializer = ProductSerializer(product)
+        # Combine product and reviews data
+        response_data = {
+            'product': product_serializer.data,
+            'reviews': review_serializer.data,
+        }
 
-    return Response(serializer.data)
+        return Response(response_data)
+    
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
 def getAddressByUserId(request, user_id):
@@ -156,7 +170,7 @@ def getUserOrders(request, user_id):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-@api_view(['POST'])
+@api_view(['PUT'])
 def saveReview(request):
     try:
         user_id = request.data.get('user_id')
@@ -171,26 +185,30 @@ def saveReview(request):
         user = get_object_or_404(CustomUser, id=user_id)
         product = get_object_or_404(Product, id=product_id)
 
-        # Get or create the user and product instances
-        user = CustomUser.objects.get(pk=user_id)
-        product = Product.objects.get(pk=product_id)
-
-        # Create Review record
-        review_data = {
-            'user': user_id,
-            'product': product_id,
-            'review': review_text,
-        }
-        review_serializer = ReviewSerializer(data=review_data)
-
         # Check if the user already put a comment
         review = Review.objects.filter(user=user, product=product).first()
 
-        if review_serializer.is_valid():
-            review_serializer.save()
-            return Response(review_serializer.data, status=status.HTTP_201_CREATED)
+        # Update or create a new one
+        if review:
+            review.review = review_text
+            review.date = timezone.now()
+            review.save()
+            review_serializer = ReviewSerializer(review)
         else:
-            return Response(review_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            review_data = {
+                'user': user_id,
+                'product': product_id,
+                'review': review_text,
+            }
+            review_serializer = ReviewSerializer(data=review_data)
+
+            if review_serializer.is_valid():
+                review_serializer.save()
+            else:
+                return Response(review_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+        return Response(review_serializer.data, status=status.HTTP_200_OK)
 
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
