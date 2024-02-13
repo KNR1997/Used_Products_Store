@@ -24,4 +24,5 @@ urlpatterns = [
     path('getUserOrders/<int:user_id>', views.getUserOrders, name='get_User_Orders'),
 
     path('save-review', views.saveReview, name='save_review'),
+    path('delete-review/<int:review_id>', views.deleteReview, name='delete_review'),
 ]

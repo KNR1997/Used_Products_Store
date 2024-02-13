@@ -212,3 +212,19 @@ def saveReview(request):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
+@api_view(['DELETE'])
+def deleteReview(request, review_id):
+    try:
+        # Get the review by ID
+        review = get_object_or_404(Review, id=review_id)
+
+        # Check if the user has permission to delete the review (optional)
+        # Add your permission logic here...
+
+        # Delete the review
+        review.delete()
+
+        return Response({'message': 'Review deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

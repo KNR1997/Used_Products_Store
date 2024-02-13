@@ -4,12 +4,12 @@ import { TrashIcon } from "@heroicons/vue/24/solid";
 import { onMounted, ref } from "vue";
 
 const comment = ref('');
-const emit = defineEmits(['post-comment', 'close']);
+const emit = defineEmits(['post-comment', 'close', 'delete-review']);
 const props = defineProps(['userReview']);
 
 onMounted(() => {
     if(props.userReview != null) {
-        comment.value = props.userReview
+        comment.value = props.userReview.review
     }
 })
 
@@ -19,6 +19,10 @@ const postComment = () => {
 
 const closeBox = () => {
     emit('close')
+}
+
+const deleteReview = () => {
+    emit('delete-review', props.userReview.id)
 }
 
 </script>
@@ -36,7 +40,7 @@ const closeBox = () => {
                     Post comment
                 </button>
                 <section class="flex justify-between">
-                    <button class="px-5">
+                    <button @click="deleteReview" class="px-5">
                         <TrashIcon class="icon" style="height: 20px;"/>
                     </button>
                     <button @click="closeBox" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-red-800">

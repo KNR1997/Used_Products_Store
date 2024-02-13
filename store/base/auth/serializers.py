@@ -41,4 +41,4 @@ class ReviewSerializer(serializers.ModelSerializer):
     user_details = CustomUserSerializer(source='user', read_only=True)
     class Meta:
         model = Review
-        fields = ['user', 'user_details', 'product', 'review', 'date']
+        fields = ['id', 'user', 'user_details', 'product', 'review', 'date']

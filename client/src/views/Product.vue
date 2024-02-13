@@ -3,15 +3,15 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { cartStore, authStore } from "../store/store";
 import { StarIcon, HeartIcon, HandThumbUpIcon } from "@heroicons/vue/24/solid";
-import ProductCommentBox from "../components/ProductCommentBox.vue";
-import ProductCommentInput from "../components/ProductCommentInput.vue";
+import ProductCommentBox from "../components/ProductComment.vue";
+import ProductCommentInput from "../components/ProductCommentAddEdit.vue";
 
 let product = ref({});
 let reviews = ref([]);
 let items = ref([]);
 let currentImage = ref(null);
 let addNewReview = ref(false);
-let userReview = ref("");
+let userReview = ref();
 
 let url = "https://picsum.photos/id/1/800/800";
 
@@ -24,9 +24,10 @@ const images = ref([
   "https://picsum.photos/id/144/800/800",
 ]);
 
-onMounted(async () => {
+const fetchData = async () => {
   const route = useRoute();
   const productId = route.params.id;
+  console.log('productID: ', productId)
 
   try {
     const response = await fetch(
@@ -38,7 +39,9 @@ onMounted(async () => {
   } catch (error) {
     console.error(error);
   }
-});
+};
+
+onMounted(fetchData);
 
 watch(() => {
   if (product.value) {
@@ -92,6 +95,26 @@ const postComment = async (data) => {
   }
 };
 
+// Axios common method
+// const postComment = async (data) => {
+//   const user = authStore().getUser();
+//   const payload = {
+//     user_id: user.user_id,
+//     product_id: product.value.id,
+//     review: data,
+//   };
+
+//   const endpoint = `http://127.0.0.1:8000/api/save-review`;
+//   const result = await sendRequest('PUT', endpoint, payload);
+
+//   if (result) {
+//     addNewReview.value = false;
+//     // Optionally, update the state or perform other actions upon successful submission
+//   } else {
+//     console.error('Failed to submit review');
+//   }
+// };
+
 const closeCommentBox = () => {
   addNewReview.value = false;
 };
@@ -121,7 +144,7 @@ const reviewdByUser = computed(() => {
   if (Array.isArray(reviews.value) && reviews.value.length > 0) {
     return reviews.value.some((review) => {
       if (review.user === user.user_id) {
-        userReview.value = review.review; // update userReview
+        userReview.value = review; // update userReview
         return true;
       }
       return false;
@@ -129,6 +152,26 @@ const reviewdByUser = computed(() => {
   }
   return false;
 });
+
+const deleteReview = async (reviewId) => {
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:8000/api/delete-review/${reviewId}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (response.ok) {
+      console.log("Review deleted successfully");
+      // Optionally, update your local state or perform other actions upon successful deletion
+    } else {
+      console.error("Failed to delete review");
+    }
+  } catch (error) {
+    console.log("Error during review deletion", error);
+  }
+};
 </script>
 
 <template>
@@ -263,6 +306,7 @@ const reviewdByUser = computed(() => {
       <section v-if="addNewReview" class="py-5">
         <ProductCommentInput
           @post-comment="postComment"
+          @delete-review="deleteReview"
           @close="closeCommentBox"
           :userReview="userReview"
         />
