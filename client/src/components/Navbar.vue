@@ -2,7 +2,7 @@
 import { onMounted, reactive, watch } from "vue";
 import { authStore, cartStore } from "../store/store";
 import eventBus from "../EventBus";
-import { ShoppingCartIcon, MagnifyingGlassIcon } from "@heroicons/vue/24/solid";
+import { ShoppingCartIcon, MagnifyingGlassIcon, PhoneIcon } from "@heroicons/vue/24/solid";
 
 const state = reactive({
   isAccountMenu: false,
@@ -64,10 +64,17 @@ const signOut = () => {
         >
           Buyer Protection
         </li>
-        <li class="px-3 hover:text-[#FF4646] cursor-pointer">
-          <Icon name="ic:sharp-install-mobile" size="17" />
+        <li class="flex px-3 hover:text-[#FF4646] cursor-pointer">
+          <PhoneIcon class="icon" style="width: 15px; padding-right: 5px;"/>
           App
         </li>
+        <router-link to="my-products">
+          <li
+            class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
+          >
+            Profile
+          </li>
+        </router-link>
         <li
           @mouseenter="state.isAccountMenu = true"
           @mouseleave="state.isAccountMenu = false"

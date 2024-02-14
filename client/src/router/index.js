@@ -6,12 +6,14 @@ import Shoppingcart from '../views/Shoppingcart.vue'
 import Address from '../views/Address.vue'
 import Checkout from '../views/Checkout.vue'
 import Orders from '../views/Orders.vue'
+import SellerProducts from '../views/seller/SellerProducts.vue'
+import ProductsTable from '../views/seller/ProductsTable.vue'
 
 const routes = [
     {
         path: '/',
         name: 'home',
-        component: Home
+        component: Home,
     },
     {
         path: '/product/:id',
@@ -42,6 +44,16 @@ const routes = [
         path: '/orders',
         name: 'orders',
         component: Orders
+    },
+    {
+        path: '/my-products',
+        name: 'sellerProducts',
+        component: SellerProducts
+    },
+    {
+        path: '/productsTable',
+        name: 'productsTable',
+        component: ProductsTable
     }
 ];
 
