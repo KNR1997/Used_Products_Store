@@ -63,7 +63,9 @@ class Order(models.Model):
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    review = models.CharField(max_length=500)
+    title = models.TextField(max_length=500)
+    review = models.TextField(max_length=500)
+    rating = models.FloatField()
     date = models.DateTimeField(auto_now_add=True)  # Automatically set when a new review is created
 
     def __str__(self):

@@ -176,6 +176,8 @@ def saveReview(request):
         user_id = request.data.get('user_id')
         product_id = request.data.get('product_id')
         review_text = request.data.get('review')
+        title = request.data.get('title')
+        rating = request.data.get('rating')
 
         # Validate user, product, and review_text
         if not user_id or not product_id or not review_text:
@@ -191,6 +193,8 @@ def saveReview(request):
         # Update or create a new one
         if review:
             review.review = review_text
+            review.title = title
+            review.rating = rating
             review.date = timezone.now()
             review.save()
             review_serializer = ReviewSerializer(review)
@@ -199,6 +203,8 @@ def saveReview(request):
                 'user': user_id,
                 'product': product_id,
                 'review': review_text,
+                'title': title,
+                'rating': rating
             }
             review_serializer = ReviewSerializer(data=review_data)
 

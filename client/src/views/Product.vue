@@ -54,7 +54,9 @@ const postComment = async (data) => {
   const payload = {
     user_id: user.user_id,
     product_id: product.value.id,
-    review: data,
+    title: data.title,
+    review: data.comment,
+    rating: data.rating
   };
 
   let result = await putData(url, payload);
