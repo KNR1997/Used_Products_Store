@@ -5,6 +5,7 @@ import { cartStore, authStore } from "../store/store";
 import { StarIcon, HeartIcon, HandThumbUpIcon } from "@heroicons/vue/24/solid";
 import ProductCommentBox from "../components/ProductComment.vue";
 import ProductCommentInput from "../components/ProductCommentAddEdit.vue";
+import { getData, putData, deleteData } from "../api/fetch";
 
 let product = ref({});
 let reviews = ref([]);
@@ -12,6 +13,7 @@ let items = ref([]);
 let currentImage = ref(null);
 let addNewReview = ref(false);
 let userReview = ref();
+let productId = ref();
 
 let url = "https://picsum.photos/id/1/800/800";
 
@@ -24,24 +26,58 @@ const images = ref([
   "https://picsum.photos/id/144/800/800",
 ]);
 
-const fetchData = async () => {
+onMounted(() => {
   const route = useRoute();
-  const productId = route.params.id;
-  console.log('productID: ', productId)
+  productId = route.params.id;
 
-  try {
-    const response = await fetch(
-      `http://127.0.0.1:8000/api/getProduct/${productId}`
-    );
-    let data = await response.json();
-    product.value = data.product;
-    reviews.value = data.reviews;
-  } catch (error) {
-    console.error(error);
+  getProductDetails();
+})
+
+// Get Single Product Details
+const getProductDetails = async () => {
+  let url = `http://127.0.0.1:8000/api/getProduct/${productId}`;
+
+  let result = await getData(url);
+  if (result) {
+    product.value = result.product;
+    reviews.value = result.reviews;
+  } else {
+    console.error("Failed to fetch data");
   }
 };
 
-onMounted(fetchData);
+// Put a Review on the product
+const postComment = async (data) => {
+  const user = authStore().getUser();
+  let url = `http://127.0.0.1:8000/api/save-review`;
+
+  const payload = {
+    user_id: user.user_id,
+    product_id: product.value.id,
+    review: data,
+  };
+
+  let result = await putData(url, payload);
+  if (result) {
+    addNewReview.value = false;
+    getProductDetails();
+  } else {
+    console.error("Failed to fetch data");
+  }
+};
+
+// Delete a Review
+const deleteReview = async (reviewId) => {
+  let url = `http://127.0.0.1:8000/api/delete-review/${reviewId}`;
+  let response = deleteData(url);
+
+  if (response) {
+    addNewReview.value = false;
+    getProductDetails();
+  } else {
+    console.error("Failed to fetch data");
+  }
+};
 
 watch(() => {
   if (product.value) {
@@ -61,59 +97,6 @@ const addReview = () => {
   addNewReview.value = true;
 };
 
-const postComment = async (data) => {
-  try {
-    const user = authStore().getUser();
-
-    console.log("data: ", data);
-
-    const payload = {
-      user_id: user.user_id,
-      product_id: product.value.id,
-      review: data,
-    };
-
-    const endpoint = `http://127.0.0.1:8000/api/save-review`;
-
-    const response = await fetch(endpoint, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    // Check if the request was successful
-    if (response.ok) {
-      addNewReview.value = false;
-      // Optionally, update the state or perform other actions upon successful submission
-    } else {
-      console.error("Failed to submit review");
-    }
-  } catch (error) {
-    console.log("Error during review submission", error);
-  }
-};
-
-// Axios common method
-// const postComment = async (data) => {
-//   const user = authStore().getUser();
-//   const payload = {
-//     user_id: user.user_id,
-//     product_id: product.value.id,
-//     review: data,
-//   };
-
-//   const endpoint = `http://127.0.0.1:8000/api/save-review`;
-//   const result = await sendRequest('PUT', endpoint, payload);
-
-//   if (result) {
-//     addNewReview.value = false;
-//     // Optionally, update the state or perform other actions upon successful submission
-//   } else {
-//     console.error('Failed to submit review');
-//   }
-// };
 
 const closeCommentBox = () => {
   addNewReview.value = false;
@@ -153,25 +136,6 @@ const reviewdByUser = computed(() => {
   return false;
 });
 
-const deleteReview = async (reviewId) => {
-  try {
-    const response = await fetch(
-      `http://127.0.0.1:8000/api/delete-review/${reviewId}`,
-      {
-        method: "DELETE",
-      }
-    );
-
-    if (response.ok) {
-      console.log("Review deleted successfully");
-      // Optionally, update your local state or perform other actions upon successful deletion
-    } else {
-      console.error("Failed to delete review");
-    }
-  } catch (error) {
-    console.log("Error during review deletion", error);
-  }
-};
 </script>
 
 <template>
