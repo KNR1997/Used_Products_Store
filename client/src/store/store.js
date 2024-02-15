@@ -41,3 +41,20 @@ export const cartStore = defineStore('cartStore', {
         }
     }
 })
+
+export const productStore = defineStore('productStore', {
+    state: () => ({
+        product: {}
+    }),
+    actions: {
+        getProductData() {
+            return this.product;
+        },
+        setProductData(product) {
+            this.product = product;
+        },
+        clearProductData() {
+            this.product = null;
+        },
+    }
+})

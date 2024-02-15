@@ -234,3 +234,21 @@ def deleteReview(request, review_id):
 
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['GET'])
+def getProductsByUserId(request, user_id):
+    try:
+        # Get the user instance
+        user = get_object_or_404(CustomUser, id=user_id)
+
+        # Get all products related to the user
+        products = Product.objects.filter(user=user)
+
+        # Serialize the products data
+        serializer = ProductSerializer(products, many=True)
+
+        # Return the serialized data in the response
+        return Response(serializer.data)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

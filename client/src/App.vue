@@ -5,7 +5,7 @@ import DashboardLayout from '../layouts/DashboardLayout.vue';
 </script>
 
 <template>
-  <MainLayout />
+  <DashboardLayout />
 </template>
 
 <style scoped>

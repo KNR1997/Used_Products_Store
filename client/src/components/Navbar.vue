@@ -75,6 +75,13 @@ const signOut = () => {
             Profile
           </li>
         </router-link>
+        <router-link to="productAddEdit">
+          <li
+            class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
+          >
+            Product-Edit
+          </li>
+        </router-link>
         <li
           @mouseenter="state.isAccountMenu = true"
           @mouseleave="state.isAccountMenu = false"

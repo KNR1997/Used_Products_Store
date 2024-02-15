@@ -25,4 +25,6 @@ urlpatterns = [
 
     path('save-review', views.saveReview, name='save_review'),
     path('delete-review/<int:review_id>', views.deleteReview, name='delete_review'),
+
+    path('getProductsByUserId/<int:user_id>', views.getProductsByUserId),
 ]
