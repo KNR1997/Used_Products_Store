@@ -1,8 +1,8 @@
 <script setup>
 import { defineComponent, onMounted, ref, h } from "vue";
-import { NButton, NDataTable } from "naive-ui";
+import { NButton, NDataTable, NSpace } from "naive-ui";
 import { authStore, productStore } from "../../../store/store";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 const data = ref([]);
 const openAddEdit = ref(false);
@@ -86,12 +86,26 @@ const editProduct = (row) => {
   productStore().setProductData(row);
 
   // Navigate to the productAddEdit route
-  router.push({ name: 'productAddEdit' });
+  router.push({ name: "productAddEdit" });
+};
+
+const addProduct = () => {
+  productStore().clearProductData();
+
+  router.push({ name: "productAddEdit" });
 }
 </script>
 
 <template>
   <div>
+    <div class="flex justify-between py-5">
+      <h1 class="px-2 text-2xl">Products</h1>
+      <div class="px-3">
+        <n-button strong secondary type="info" @click="addProduct">
+          Add
+        </n-button>
+      </div>
+    </div>
     <n-data-table :columns="columns" :data="data" />
   </div>
 </template>

@@ -47,7 +47,7 @@ const routes = [
     },
     {
         path: '/productSearch',
-        name: 'ProductSearch',
+        name: 'productSearch',
         component: ProductSearch
     },
     {

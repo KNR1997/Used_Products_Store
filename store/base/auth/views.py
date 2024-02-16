@@ -258,6 +258,7 @@ def saveProduct(request):
     try:
         # Check if the user already has an address
         product_id = request.data.get('id')
+        user_id = request.data.get('user_id')
         product = Product.objects.filter(id=product_id).first()
 
         if product:
@@ -268,7 +269,7 @@ def saveProduct(request):
             serializer = ProductSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user_id=user_id)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

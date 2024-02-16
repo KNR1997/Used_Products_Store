@@ -1,27 +1,37 @@
 <script setup>
 import { onMounted, reactive, ref } from "vue";
 import { NForm, NFormItem, NInput, NButton, useMessage } from "naive-ui";
-import { productStore } from "../../../store/store";
+import { productStore, authStore } from "../../../store/store";
 import { putData } from "../../../api/fetch";
+import { useRouter } from "vue-router";
 
 const formRef = ref(null);
-// const message = useMessage();
+const formStatus = ref("Add");
+const router = useRouter();
+const message = useMessage();
+
 const formValue = reactive({
   id: null,
   name: null,
   title: null,
   price: null,
-  quantity: null,
-  rating: null,
-  reviews: null,
-  sold: null,
+  quantity: null || 0,
+  rating: null || 0,
+  reviews: null || 0,
+  sold: null || 0,
   description: null,
+  user_id: null,
 });
 
 onMounted(() => {
   // Access the selected product data from the store
   const selectedProduct = productStore().getProductData();
-  if (selectedProduct) {
+  const user = authStore().getUser();
+
+  formValue.user_id = user.user_id;
+
+  if (selectedProduct && user) {
+    formStatus.value = "Edit";
     formValue.id = selectedProduct.id;
     formValue.name = selectedProduct.name;
     formValue.title = selectedProduct.title;
@@ -66,32 +76,41 @@ const handleSaveClick = (e) => {
   e.preventDefault();
   formRef.value?.validate((errors) => {
     if (!errors) {
-      console.log('no errors');
+      console.log("no errors");
       saveProduct();
       // message.success("Valid");
     } else {
-      console.log(errors)
+      console.log(errors);
     }
-  })
-}
+  });
+};
 
 const saveProduct = async () => {
-  const url = 'http://127.0.0.1:8000/api/saveProduct';
+  const url = "http://127.0.0.1:8000/api/saveProduct";
 
   let response = putData(url, formValue);
-  console.log('resposne: ', response)
-}
+  if (response) {
+    message.success(
+      "Product Save!!!"
+    );
+    setTimeout(() => {
+      router.push({ name: "productSearch" });
+    }, 2000)
+  }
+};
 </script>
 
 <template>
   <div class="mt-4 max-w-[1200px] mx-auto px-2">
+    <div class="flex justify-between py-5">
+      <h1 class="px-2 text-2xl">Product - {{ formStatus }}</h1>
+    </div>
     <n-form
       ref="formRef"
       inline
       :label-width="80"
       :model="formValue"
       :rules="rules"
-      :size="size"
     >
       <n-form-item label="Name" path="name">
         <n-input v-model:value="formValue.name" placeholder="Input Name" />
