@@ -1,7 +1,7 @@
 <script setup>
 import { defineComponent, onMounted, ref, h } from "vue";
 import { NButton, NDataTable } from "naive-ui";
-import { authStore, productStore } from "../../store/store";
+import { authStore, productStore } from "../../../store/store";
 import { useRouter } from 'vue-router';
 
 const data = ref([]);

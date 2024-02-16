@@ -252,3 +252,27 @@ def getProductsByUserId(request, user_id):
 
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['POST', 'PUT'])
+def saveProduct(request):
+    try:
+        # Check if the user already has an address
+        product_id = request.data.get('id')
+        product = Product.objects.filter(id=product_id).first()
+
+        if product:
+            # If the user has an address, update the existing address
+            serializer = ProductSerializer(product, data=request.data)
+        else:
+            # If the user does not have an address, create a new address
+            serializer = ProductSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    

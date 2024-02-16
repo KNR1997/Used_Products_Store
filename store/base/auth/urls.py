@@ -16,6 +16,7 @@ urlpatterns = [
 
     path('getAllProducts/', views.getAllProducts),
     path('getProduct/<int:id>', views.getProduct),
+    path('saveProduct', views.saveProduct),
 
     path('save-user-address/<int:user_id>', views.saveUserAddress, name='save_user_address'),
     path('get-address/<int:user_id>', views.getAddressByUserId, name='get_address_by_user_id'),

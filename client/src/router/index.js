@@ -6,9 +6,8 @@ import Shoppingcart from '../views/Shoppingcart.vue'
 import Address from '../views/Address.vue'
 import Checkout from '../views/Checkout.vue'
 import Orders from '../views/Orders.vue'
-import SellerProducts from '../views/seller/SellerProducts.vue'
-import ProductsTable from '../views/seller/ProductsTable.vue'
-import ProductAddEdit from '../views/ProductAddEdit.vue'
+import ProductSearch from '../views/Admin/Product/ProductSearch.vue'
+import ProductAddEdit from '../views/Admin/Product/ProductAddEdit.vue'
 
 const routes = [
     {
@@ -47,20 +46,14 @@ const routes = [
         component: Orders
     },
     {
-        path: '/my-products',
-        name: 'sellerProducts',
-        component: ProductsTable
-    },
-    {
-        path: '/productsTable',
-        name: 'productsTable',
-        component: ProductsTable
+        path: '/productSearch',
+        name: 'ProductSearch',
+        component: ProductSearch
     },
     {
         path: '/productAddEdit',
         name: 'productAddEdit',
         component: ProductAddEdit,
-        props: route => ({ productData: route.params.productData })
     }
 ];
 

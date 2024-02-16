@@ -68,7 +68,7 @@ const signOut = () => {
           <PhoneIcon class="icon" style="width: 15px; padding-right: 5px;"/>
           App
         </li>
-        <router-link to="my-products">
+        <router-link to="productSearch">
           <li
             class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
           >
