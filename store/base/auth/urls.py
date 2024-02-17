@@ -28,4 +28,6 @@ urlpatterns = [
     path('delete-review/<int:review_id>', views.deleteReview, name='delete_review'),
 
     path('getProductsByUserId/<int:user_id>', views.getProductsByUserId),
+    path('getReviewsByProductId/<int:product_id>', views.getReviewsByProductId),
+
 ]

@@ -8,6 +8,7 @@ import Checkout from '../views/Checkout.vue'
 import Orders from '../views/Orders.vue'
 import ProductSearch from '../views/Admin/Product/ProductSearch.vue'
 import ProductAddEdit from '../views/Admin/Product/ProductAddEdit.vue'
+import ProductReviews from '../views/Admin/Product/ProductReviews.vue'
 
 const routes = [
     {
@@ -54,6 +55,11 @@ const routes = [
         path: '/productAddEdit',
         name: 'productAddEdit',
         component: ProductAddEdit,
+    },
+    {
+        path: '/productReviews',
+        name: 'productReviews',
+        component: ProductReviews,
     }
 ];
 

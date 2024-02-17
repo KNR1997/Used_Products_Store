@@ -280,3 +280,21 @@ def saveProduct(request):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
+@api_view(['GET'])
+def getReviewsByProductId(request, product_id):
+    try:
+        # Get the product instance
+        product = get_object_or_404(Product, id=product_id)
+
+        # Get all reviews related to the product
+        reviews = Review.objects.filter(product=product)
+
+        # Serialize the reviews data
+        serializer = ReviewSerializer(reviews, many=True)
+
+        # Return the serialized data in the response
+        return Response(serializer.data)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    

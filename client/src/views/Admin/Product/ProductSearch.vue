@@ -1,7 +1,8 @@
 <script setup>
 import { defineComponent, onMounted, ref, h } from "vue";
 import { NButton, NDataTable, NSpace } from "naive-ui";
-import { authStore, productStore } from "../../../store/store";
+import { productStore } from "./store";
+import { authStore } from "../../../store/store";
 import { useRouter } from "vue-router";
 
 const data = ref([]);
@@ -21,7 +22,6 @@ async function fetchAllSellerProducts(userId) {
     );
     let result = await response.json();
     data.value = result;
-    console.log("seller product: ", result);
   } catch (error) {
     console.error(error);
   }
@@ -80,6 +80,22 @@ const columns = [
       );
     },
   },
+  {
+    title: "Show",
+    key: "show",
+    render(row) {
+      return h(
+        NButton,
+        {
+          strong: true,
+          tertiary: true,
+          size: "small",
+          onClick: () => showReviews(row),
+        },
+        { default: () => "Reviews" }
+      );
+    },
+  },
 ];
 
 const editProduct = (row) => {
@@ -87,6 +103,13 @@ const editProduct = (row) => {
 
   // Navigate to the productAddEdit route
   router.push({ name: "productAddEdit" });
+};
+
+const showReviews = (row) => {
+  productStore().setProductData(row);
+
+  // Navigate to the productAddEdit route
+  router.push({ name: "productReviews" });
 };
 
 const addProduct = () => {
