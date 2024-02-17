@@ -1,19 +1,25 @@
 <script setup>
 import { TrashIcon } from "@heroicons/vue/24/solid";
-
-import { onMounted, ref } from "vue";
+import { NRate } from "naive-ui";
+import { computed, onMounted, ref } from "vue";
 
 const title = ref('');
 const comment = ref('');
-const rating = ref(4);
+const rating = ref(0);
 const emit = defineEmits(['post-comment', 'close', 'delete-review']);
 const props = defineProps(['userReview']);
 
 onMounted(() => {
     if(props.userReview != null) {
+        rating.value = props.userReview.rating
+        title.value = props.userReview.title
         comment.value = props.userReview.review
     }
 })
+
+const addRating = (value) => {
+    rating.value = value
+}
 
 const postComment = () => {
     let data = {
@@ -39,6 +45,8 @@ const deleteReview = () => {
         <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
             <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                 <label for="comment" class="sr-only">Your comment</label>
+                <n-rate allow-half :value="rating" :on-update:value="addRating"/>
+                {{ rating }}
                 <textarea v-model="title" id="title" rows="1" class="w-full px-0 text-sm text-gray-900 font-bold bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Title..." required></textarea>
                 <textarea v-model="comment" id="comment" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write a comment..." required></textarea>
             </div>

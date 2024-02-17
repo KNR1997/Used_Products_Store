@@ -44,10 +44,10 @@ const columns = [
     title: "Price",
     key: "price",
   },
-  {
-    title: "Description",
-    key: "description",
-  },
+  // {
+  //   title: "Description",
+  //   key: "description",
+  // },
   {
     title: "Stock",
     key: "quantity",
@@ -97,7 +97,7 @@ const addProduct = () => {
 </script>
 
 <template>
-  <div>
+  <div class="mt-4 max-w-[1600px] mx-auto px-2">
     <div class="flex justify-between py-5">
       <h1 class="px-2 text-2xl">Products</h1>
       <div class="px-3">

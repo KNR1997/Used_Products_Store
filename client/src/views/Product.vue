@@ -6,6 +6,7 @@ import { StarIcon, HeartIcon, HandThumbUpIcon } from "@heroicons/vue/24/solid";
 import ProductCommentBox from "../components/ProductComment.vue";
 import ProductCommentInput from "../components/ProductCommentAddEdit.vue";
 import { getData, putData, deleteData } from "../api/fetch";
+import { NRate } from "naive-ui";
 
 let product = ref({});
 let reviews = ref([]);
@@ -245,12 +246,10 @@ const reviewdByUser = computed(() => {
     <div id="comment">
       <div id="top" class="md:flex gap-4 justify-between mx-auto w-full pb-8">
         <div id="left">
-          <p class="text-2xl font-bold py-10">Customer Reviews (3298)</p>
-          <p class="text-6xl font-bold pb-4">4.7</p>
+          <p class="text-2xl font-bold py-10">Customer Reviews ({{ product.reviews }})</p>
+          <p class="text-6xl font-bold pb-4">{{ product.rating }}</p>
           <div id="stars" class="flex">
-            <StarIcon class="icon" style="height: 30px;" />
-            <StarIcon class="icon" style="height: 30px;" />
-            <StarIcon class="icon" style="height: 30px;" />
+            <n-rate allow-half :value="product.rating" size="large" color="red" />
           </div>
           <p>All reviews come from verified purchasers</p>
         </div>

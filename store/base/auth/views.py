@@ -14,6 +14,8 @@ from .serializers import ProductSerializer, AddressSerializer, OrderSerializer, 
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
+from .functions import update_product_rating
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -213,6 +215,7 @@ def saveReview(request):
             else:
                 return Response(review_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
+        update_product_rating(product_id=product_id, rating=rating)
         return Response(review_serializer.data, status=status.HTTP_200_OK)
 
     except Exception as e:

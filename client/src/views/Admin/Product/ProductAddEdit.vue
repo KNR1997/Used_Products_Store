@@ -101,14 +101,14 @@ const saveProduct = async () => {
 </script>
 
 <template>
-  <div class="mt-4 max-w-[1200px] mx-auto px-2">
+  <div class="mt-4 max-w-[1600px] mx-auto px-2">
     <div class="flex justify-between py-5">
       <h1 class="px-2 text-2xl">Product - {{ formStatus }}</h1>
     </div>
     <n-form
       ref="formRef"
       inline
-      :label-width="80"
+      :label-width="100"
       :model="formValue"
       :rules="rules"
     >

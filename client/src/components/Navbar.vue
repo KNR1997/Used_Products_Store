@@ -2,7 +2,11 @@
 import { onMounted, reactive, watch } from "vue";
 import { authStore, cartStore } from "../store/store";
 import eventBus from "../EventBus";
-import { ShoppingCartIcon, MagnifyingGlassIcon, PhoneIcon } from "@heroicons/vue/24/solid";
+import {
+  ShoppingCartIcon,
+  MagnifyingGlassIcon,
+  PhoneIcon,
+} from "@heroicons/vue/24/solid";
 
 const state = reactive({
   isAccountMenu: false,
@@ -65,16 +69,23 @@ const signOut = () => {
           Buyer Protection
         </li>
         <li class="flex px-3 hover:text-[#FF4646] cursor-pointer">
-          <PhoneIcon class="icon" style="width: 15px; padding-right: 5px;"/>
+          <PhoneIcon class="icon" style="width: 15px; padding-right: 5px;" />
           App
         </li>
         <router-link to="productSearch">
           <li
             class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
           >
-            Profile
+            Products
           </li>
         </router-link>
+        <!-- <router-link to="productSearch">
+          <li
+            class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
+          >
+            Products
+          </li>
+        </router-link> -->
         <router-link to="productAddEdit">
           <li
             class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
@@ -114,9 +125,7 @@ const signOut = () => {
             <div class="border-b" />
             <ul class="bg-white">
               <router-link to="/orders">
-                <li
-                  class="text-[13px] py-2 px-4 w-full hover:bg-gray-200"
-                >
+                <li class="text-[13px] py-2 px-4 w-full hover:bg-gray-200">
                   My Orders
                 </li>
               </router-link>
@@ -137,21 +146,29 @@ const signOut = () => {
         class="flex lg:justify-start justify-between gap-10 max-w-[1150px] w-full px-3 py-5 mx-auto"
       >
         <router-link to="/" class="min-w-[170px]">
-          <img width="170" src="../public/AliExpress-logo.png" />
+          <img width="170" src="../assets/shopping_logo.jpg" />
         </router-link>
 
         <div class="max-w-[700px] w-full md:block hidden">
           <div class="relative">
             <div
-              class="flex items-center border-2 border-[#FF4646] rounded-md w-full"
+              class="flex items-center border-4 border-gray rounded-md w-full"
             >
               <input
-                class="w-full placeholder-gray-400 text-sm pl-3 focus:outline-none"
+                class="w-full placeholder-gray-400 text-sm pl-3"
                 placeholder="kitchen accessories"
                 type="text"
                 v-model="searchItem"
               />
-              <MagnifyingGlassIcon class="icon" style="height: 30px; width: 40px; color: white; background-color: red;"/>
+              <MagnifyingGlassIcon
+                class="icon"
+                style="
+                  height: 40px;
+                  width: 40px;
+                  color: white;
+                  background-color: red;
+                "
+              />
             </div>
           </div>
         </div>
@@ -172,10 +189,6 @@ const signOut = () => {
             </div>
           </button>
         </router-link>
-
-        <button
-          class="md:hidden block rounded-full p-1.5 -mt-[4px] hover:bg-gray-200"
-        ></button>
       </div>
     </div>
   </div>
