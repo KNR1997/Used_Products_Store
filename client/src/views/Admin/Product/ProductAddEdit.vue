@@ -1,7 +1,8 @@
 <script setup>
 import { onMounted, reactive, ref } from "vue";
 import { NForm, NFormItem, NInput, NButton, useMessage } from "naive-ui";
-import { productStore, authStore } from "../../../store/store";
+import { authStore } from "../../../store/store";
+import { productStore } from "./store";
 import { putData } from "../../../api/fetch";
 import { useRouter } from "vue-router";
 
@@ -107,7 +108,6 @@ const saveProduct = async () => {
     </div>
     <n-form
       ref="formRef"
-      inline
       :label-width="100"
       :model="formValue"
       :rules="rules"

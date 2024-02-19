@@ -1,18 +1,43 @@
 <script setup>
-import { onMounted, reactive, watch } from "vue";
+import { computed, onMounted, reactive, watch } from "vue";
 import { authStore, cartStore } from "../store/store";
 import eventBus from "../EventBus";
 import {
   ShoppingCartIcon,
   MagnifyingGlassIcon,
   PhoneIcon,
+  EyeDropperIcon,
 } from "@heroicons/vue/24/solid";
+import { useRouter } from "vue-router";
+import { NDropdown, NIcon } from "naive-ui";
 
 const state = reactive({
   isAccountMenu: false,
   isCartHover: false,
   user: false,
+  onSellingPage: false,
 });
+const options = [
+  {
+    label: "Sports",
+    key: "Sports",
+    disabled: true,
+  },
+  {
+    label: "Electronics",
+    key: "Electronics",
+  },
+  {
+    label: "Fashion",
+    key: "Fashion",
+  },
+  {
+    label: "Home & Garden",
+    key: "Home & Garden",
+  },
+];
+
+const router = useRouter();
 
 onMounted(() => {
   getUserStatus();
@@ -35,6 +60,17 @@ const signOut = () => {
   const store = authStore();
   store.logoutUser(); // Call the logoutUser action from the store
 };
+
+const navigateToSelling = () => {
+  state.onSellingPage = true;
+  router.push({ name: "productSearch" });
+};
+
+const renderIcon = () => {
+  return h(NIcon, null, {
+    default: () => h(EyeDropperIcon),
+  });
+};
 </script>
 
 <template>
@@ -56,7 +92,7 @@ const signOut = () => {
         <li
           class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
         >
-          <h2>{{ state.user?.username }}</h2>
+          <h2>Hi {{ state.user?.username }}</h2>
         </li>
         <li
           class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
@@ -72,27 +108,6 @@ const signOut = () => {
           <PhoneIcon class="icon" style="width: 15px; padding-right: 5px;" />
           App
         </li>
-        <router-link to="productSearch">
-          <li
-            class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
-          >
-            Products
-          </li>
-        </router-link>
-        <!-- <router-link to="productSearch">
-          <li
-            class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
-          >
-            Products
-          </li>
-        </router-link> -->
-        <router-link to="productAddEdit">
-          <li
-            class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
-          >
-            Product-Edit
-          </li>
-        </router-link>
         <li
           @mouseenter="state.isAccountMenu = true"
           @mouseleave="state.isAccountMenu = false"
@@ -130,6 +145,12 @@ const signOut = () => {
                 </li>
               </router-link>
               <li
+                @click="navigateToSelling"
+                class="text-[13px] py-2 px-4 w-full hover:bg-gray-200"
+              >
+                My Selling
+              </li>
+              <li
                 v-if="state.user"
                 @click="signOut()"
                 class="text-[13px] py-2 px-4 w-full hover:bg-gray-200"
@@ -141,13 +162,86 @@ const signOut = () => {
         </li>
       </ul>
     </div>
+    <div
+      v-if="state.onSellingPage"
+      id="BottomMenu"
+      class="w-full bg-[#FAFAFA] border-b md:block hidden"
+    >
+      <ul
+        class="flex items-center justify-end text-xs text-[#333333] font-light px-2 h-10 bg-[#FAFAFA] max-w-[1200px]"
+      >
+        <router-link to="productSearch">
+          <li
+            class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
+          >
+            Overview
+          </li>
+        </router-link>
+        <router-link to="productAddEdit">
+          <li
+            class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
+          >
+            Sell an item
+          </li>
+        </router-link>
+        <router-link to="#">
+          <li
+            class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
+          >
+            Drafts
+          </li>
+        </router-link>
+        <router-link to="#">
+          <li
+            class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
+          >
+            Scheduled
+          </li>
+        </router-link>
+        <router-link to="#">
+          <li
+            class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
+          >
+            Active
+          </li>
+        </router-link>
+        <router-link to="#">
+          <li
+            class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
+          >
+            Sold
+          </li>
+        </router-link>
+        <router-link to="#">
+          <li
+            class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
+          >
+            Unsold
+          </li>
+        </router-link>
+        <router-link to="productSearch">
+          <li
+            class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
+          >
+            Products
+          </li>
+        </router-link>
+      </ul>
+    </div>
     <div id="MainHeader" class="flex items-center w-full bg-white">
       <div
         class="flex lg:justify-start justify-between gap-10 max-w-[1150px] w-full px-3 py-5 mx-auto"
       >
-        <router-link to="/" class="min-w-[170px]">
-          <img width="170" src="../assets/shopping_logo.jpg" />
+        <router-link to="/" class="max-w-[100px]">
+          <img src="../assets/e-commerce_logo.png" />
         </router-link>
+
+        <n-dropdown trigger="click" :options="options" @select="handleSelect">
+          <n-button :render-icon="renderIcon"
+            >Shop by <br />
+            Category</n-button
+          >
+        </n-dropdown>
 
         <div class="max-w-[700px] w-full md:block hidden">
           <div class="relative">

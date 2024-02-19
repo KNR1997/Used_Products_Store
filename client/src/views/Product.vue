@@ -129,7 +129,7 @@ const reviewdByUser = computed(() => {
 
   if (Array.isArray(reviews.value) && reviews.value.length > 0) {
     return reviews.value.some((review) => {
-      if (review.user === user.user_id) {
+      if (review.user === user?.user_id) {
         userReview.value = review; // update userReview
         return true;
       }
