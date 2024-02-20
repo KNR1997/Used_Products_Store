@@ -110,6 +110,7 @@ const saveProduct = async () => {
       ref="formRef"
       :label-width="100"
       :model="formValue"
+      label-placement="left"
       :rules="rules"
     >
       <n-form-item label="Name" path="name">

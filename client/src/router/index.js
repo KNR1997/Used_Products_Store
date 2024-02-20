@@ -9,6 +9,7 @@ import Orders from '../views/Orders.vue'
 import ProductSearch from '../views/Admin/Product/ProductSearch.vue'
 import ProductAddEdit from '../views/Admin/Product/ProductAddEdit.vue'
 import ProductReviews from '../views/Admin/Product/ProductReviews.vue'
+import Register from '../views/Register.vue'
 
 const routes = [
     {
@@ -25,6 +26,11 @@ const routes = [
         path: '/auth',
         name: 'auth',
         component: Auth
+    },
+    {
+        path: '/register',
+        name: 'register',
+        component: Register
     },
     {
         path: '/shoppingcart',

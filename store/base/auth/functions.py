@@ -18,7 +18,7 @@ def update_product_rating(product_id, rating):
             product.rating = rating
         else:
             # Calculate the updated rating
-            product.rating = (F('rating') + rating) / F('reviews')
+            product.rating = (F('rating') + rating) / (F('reviews') + 1)
 
         # Save the changes atomically
         product.save()
