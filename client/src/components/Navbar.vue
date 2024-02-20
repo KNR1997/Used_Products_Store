@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, reactive, watch } from "vue";
-import { authStore, cartStore } from "../store/store";
+import { authStore, cartStore, appStates } from "../store/store";
 import eventBus from "../EventBus";
 import {
   ShoppingCartIcon,
@@ -8,7 +8,7 @@ import {
   EyeDropperIcon,
 } from "@heroicons/vue/24/solid";
 import { useRouter } from "vue-router";
-import { NDropdown, NIcon, NSpace, NButton } from "naive-ui";
+import { NDropdown, NIcon, NSpace, NButton, useMessage } from "naive-ui";
 import TopMenuBar from "./TopMenuBar.vue";
 import BottomMenuBar from "./BottomMenuBar.vue";
 
@@ -16,8 +16,10 @@ const state = reactive({
   isAccountMenu: false,
   isCartHover: false,
   user: false,
-  onSellingPage: false,
 });
+
+const message = useMessage();
+
 const options = [
   {
     label: "Sports",
@@ -60,11 +62,11 @@ const getUserStatus = () => {
 const signOut = () => {
   const store = authStore();
   store.logoutUser(); // Call the logoutUser action from the store
-};
-
-const navigateToSelling = () => {
-  state.onSellingPage = true;
-  router.push({ name: "productSearch" });
+  appStates().closeSellerView()
+  message.success(
+    "Sign out", 
+    { duration: 3000},
+  )
 };
 
 const renderIcon = () => {
@@ -78,7 +80,6 @@ const renderIcon = () => {
   <div id="MainLayout" class="w-full z-50">
     <TopMenuBar
       :state="state"
-      @navigate-ToSelling="navigateToSelling"
       @sign-out="signOut"
     />
 

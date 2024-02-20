@@ -1,9 +1,11 @@
 <script setup>
+import { appStates } from "../store/store";
+
 const props = defineProps(['state'])
-const emit = defineEmits(['navigate-ToSelling', 'sign-out']);
+const emit = defineEmits(['sign-out']);
 
 const navigateToSelling = () => {
-    emit('navigate-ToSelling')
+    appStates().openSellerView()
 }
 
 const signOut = () => {
@@ -17,7 +19,7 @@ const signOut = () => {
       class="flex items-center justify-end text-xs text-[#333333] font-light px-2 h-10 bg-[#FAFAFA] max-w-[1200px]"
     >
       <li
-        class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer"
+        class="border-r border-r-gray-400 px-3 hover:text-[#8b5a5a] cursor-pointer"
       >
         Sell on AliExpress
       </li>
@@ -42,6 +44,7 @@ const signOut = () => {
         Buyer Protection
       </li>
       <li class="flex px-3 hover:text-[#FF4646] cursor-pointer">
+        <PhoneIcon class="icon" style="width: 15px; padding-right: 5px;" />
         App
       </li>
       <li

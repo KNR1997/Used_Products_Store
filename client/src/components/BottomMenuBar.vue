@@ -1,4 +1,6 @@
 <script setup>
+import { appStates } from "../store/store";
+
 const props = defineProps(['state'])
 
 </script>
@@ -6,7 +8,7 @@ const props = defineProps(['state'])
 <template>
   <div
     id="BottomMenu"
-    v-if="state.onSellingPage"
+    v-if="appStates().getSellerView()"
     class="w-full bg-[#FAFAFA] border-b md:block hidden"
   >
     <ul

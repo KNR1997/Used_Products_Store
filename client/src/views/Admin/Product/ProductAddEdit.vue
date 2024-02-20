@@ -112,6 +112,10 @@ const saveProduct = async () => {
       :model="formValue"
       label-placement="left"
       :rules="rules"
+      label-width="auto"
+      :style="{
+        maxWidth: '640px'
+      }"
     >
       <n-form-item label="Name" path="name">
         <n-input v-model:value="formValue.name" placeholder="Input Name" />
@@ -125,22 +129,33 @@ const saveProduct = async () => {
       <n-form-item label="Quantity" path="quantity">
         <n-input v-model:value="formValue.quantity" placeholder="Quantity" />
       </n-form-item>
-      <n-form-item label="Description" path="description">
+      <!-- <n-form-item label="Description" path="description">
         <n-input
           v-model:value="formValue.description"
           placeholder="Description"
         />
+      </n-form-item> -->
+      <n-form-item label="Textarea" path="textareaValue">
+        <n-input
+          v-model:value="formValue.description"
+          placeholder="Textarea"
+          type="textarea"
+          :autosize="{
+            minRows: 3,
+            maxRows: 5
+          }"
+        />
       </n-form-item>
-      <n-form-item>
+      <!-- <n-form-item>
         <n-button strong secondary type="primary" @click="handleSaveClick">
           Save
         </n-button>
-      </n-form-item>
-      <n-form-item>
-        <!-- <n-button strong secondary type="error" @click="handleStatusClick">
-          Inactive
-        </n-button> -->
-      </n-form-item>
+      </n-form-item> -->
+      <div style="display: flex; justify-content: flex-end">
+      <n-button strong secondary type="primary" @click="handleSaveClick">
+        Validate
+      </n-button>
+      </div>
     </n-form>
   </div>
 </template>

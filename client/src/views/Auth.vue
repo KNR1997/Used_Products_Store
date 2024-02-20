@@ -1,36 +1,31 @@
-<script>
+<script setup>
 import axios from 'axios';
 import { authStore } from '../store/store';
-import eventBus from '../EventBus';
+import { useMessage } from "naive-ui";
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-export default {
-  name: 'Signin',
-  
-  data() {
-    return {
-      username: '',
-      password: ''
-    }
-  },
+const username = ref('');
+const password = ref('');
+const message = useMessage();
+const router = useRouter();
 
-  methods: {
-    async handleSubmit(){
-      const response = await axios.post('api/token/', {
-        username: this.username,
-        password: this.password
-      });
+const handleSubmit = async () => {
+  let response = await axios.post('api/token/', {
+    username: username.value,
+    password: password.value
+  })
 
-      if(response.status === 200){
-        authStore().setUser(response.data);
-        this.$router.push('/');
-
-        // Emit the custom event to trigger Navbar refresh
-        eventBus.emit('refreshNavbar');
-      }else{
-        alert('Something went wrong!')
-      }
-    }
-  },
+  if(response.status === 200) {
+      authStore().setUser(response.data);
+      router.push({ name: "home" });
+      message.success(
+        "Sign in", 
+      { duration: 3000},
+  )
+  } else {
+    alert('Something went wrong!')
+  }
 }
 </script>
 
