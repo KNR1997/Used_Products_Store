@@ -45,7 +45,8 @@ export const cartStore = defineStore('cartStore', {
 export const appStates = defineStore('appStates', {
     state: () => ({
         // items: (localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')) : null),
-        sellerView: false
+        sellerView: false,
+        message: null
     }),
     actions: {
         openSellerView() {
@@ -56,6 +57,15 @@ export const appStates = defineStore('appStates', {
         },
         getSellerView() {
             return this.sellerView
+        },
+        getMessage() {
+            return this.message;
+        },
+        showSuccessMessage(message) {
+            this.message = message
+        },
+        showErrorMessage(message) {
+            this.message = message
         }
     }
 })

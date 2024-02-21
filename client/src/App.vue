@@ -1,6 +1,8 @@
 <script setup>
 import MainLayout from "../layouts/MainLayout.vue";
 import DashboardLayout from "../layouts/DashboardLayout.vue";
+import Error from './components/Error.vue';
+
 import {
   NMessageProvider,
   NDialogProvider,
@@ -30,6 +32,7 @@ const themeOverrides = {
     <n-dialog-provider>
       <n-message-provider placement="top-right">
         <DashboardLayout />
+        <Error />
       </n-message-provider>
     </n-dialog-provider>
   </n-config-provider>

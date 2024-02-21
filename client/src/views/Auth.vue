@@ -1,9 +1,10 @@
 <script setup>
 import axios from 'axios';
-import { authStore } from '../store/store';
+import { authStore, appStates } from '../store/store';
 import { useMessage } from "naive-ui";
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { postData } from "../api/fetch";
 
 const username = ref('');
 const password = ref('');
@@ -11,21 +12,36 @@ const message = useMessage();
 const router = useRouter();
 
 const handleSubmit = async () => {
-  let response = await axios.post('api/token/', {
+
+  let url = `http://127.0.0.1:8000/api/token/`;
+
+  const payload = {
     username: username.value,
     password: password.value
-  })
+  };
 
-  if(response.status === 200) {
-      authStore().setUser(response.data);
-      router.push({ name: "home" });
-      message.success(
-        "Sign in", 
-      { duration: 3000},
-  )
-  } else {
-    alert('Something went wrong!')
+  let result = await postData(url, payload);
+
+  if (result) {
+    authStore().setUser(result);
+    router.push({ name: "home" });
   }
+
+  // let response = await axios.post('api/token/', {
+  //   username: username.value,
+  //   password: password.value
+  // })
+
+  // if(response.status === 200) {
+  // //     authStore().setUser(response.data);
+  // //     router.push({ name: "home" });
+  // //     message.success(
+  // //       "Sign in", 
+  // //     { duration: 3000},
+  // // )
+  // } else {
+  //   alert('Something went wrong!')
+  // }
 }
 </script>
 
